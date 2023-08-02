@@ -87,3 +87,6 @@ E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\bin\Debug\net6.
 E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\bin\Debug\net6.0-windows\runtimes\osx-x64\native\IronPdfInterop.dylib
 E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\bin\Debug\net6.0-windows\runtimes\win-x64\native\IronPdfInterop.dll
 E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\bin\Debug\net6.0-windows\runtimes\win-x86\native\IronPdfInterop.dll
+E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\bin\Debug\net6.0-windows\Serilog.dll
+E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\bin\Debug\net6.0-windows\Serilog.Sinks.File.dll
+E:\Workspace\CS2022\EmguCv\CvTemplateMatching\CvTemplateMatching\obj\Debug\net6.0-windows\CvTemplateMatching.TestEmguExtractTextSpeedForm.resources

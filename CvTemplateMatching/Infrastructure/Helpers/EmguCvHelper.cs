@@ -152,10 +152,10 @@ namespace CvTemplateMatching.Infrastructure.Helpers
             var source = CvInvoke.Imread(screenshootPath, ImreadModes.Unchanged);
             var destination = game;
             var templateMask = new Mat();
-            CvInvoke.CvtColor(destination.GameMat, templateMask, ColorConversion.Bgr2Gray);
+            //CvInvoke.CvtColor(destination.GameMat, templateMask, ColorConversion.Bgr2Gray);
 
             Mat resultMat = new Mat();
-            CvInvoke.MatchTemplate(source, destination.GameMat, resultMat, TemplateMatchingType.CcoeffNormed);
+            CvInvoke.MatchTemplate(source, destination.GameMat, resultMat, TemplateMatchingType.SqdiffNormed);
 
             // get the best match position from the match result
             double minVal = 0.0;
@@ -167,9 +167,11 @@ namespace CvTemplateMatching.Infrastructure.Helpers
             //Console.WriteLine($"Best match top left position {maxLoc}");
             //Console.WriteLine($"Best match confidence {maxVal}");
 
-            double threshold = 0.8;
+            double threshold = 0.3; // take threshold from 0.3 -> 0.2 (maybe get negative but a little)
 
-            if ((maxVal > threshold))
+            //minVal = (1 - minVal) * 100;
+
+            if (minVal < threshold)
             {
                 //Console.WriteLine("Found needle");
 
@@ -179,7 +181,7 @@ namespace CvTemplateMatching.Infrastructure.Helpers
                 ////Point top_left = maxLoc;
                 ////Point bottom_right = new Point(top_left.X + destinationWidth, top_left.Y + destinationHeight);
 
-                System.Drawing.Rectangle r = new System.Drawing.Rectangle(maxLoc, destination.GameMat.Size);
+                System.Drawing.Rectangle r = new System.Drawing.Rectangle(minLoc, destination.GameMat.Size);
 
                 CvInvoke.Rectangle(source, r, new MCvScalar(255, 0, 0), 3);
 
@@ -190,8 +192,8 @@ namespace CvTemplateMatching.Infrastructure.Helpers
                 {
                     IsDetected = true,
                     GameName = game.GameName,
-                    X = maxLoc.X,
-                    Y = maxLoc.Y,
+                    X = minLoc.X,
+                    Y = minLoc.Y,
                 };
             }
 
