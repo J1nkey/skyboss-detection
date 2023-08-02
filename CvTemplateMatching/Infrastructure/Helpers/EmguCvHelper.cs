@@ -150,12 +150,25 @@ namespace CvTemplateMatching.Infrastructure.Helpers
             }
 
             var source = CvInvoke.Imread(screenshootPath, ImreadModes.Unchanged);
+
+            var heightRemain = Math.Abs(source.Height - 2220);
+            var widthRemain = Math.Abs(source.Width - 1080);
+
+            CvInvoke.Resize(source, source, new System.Drawing.Size(1080, 2220));
             var destination = game;
             var templateMask = new Mat();
             //CvInvoke.CvtColor(destination.GameMat, templateMask, ColorConversion.Bgr2Gray);
 
             Mat resultMat = new Mat();
-            CvInvoke.MatchTemplate(source, destination.GameMat, resultMat, TemplateMatchingType.SqdiffNormed);
+
+            //Image<Gray, byte> srcGray = new Image<Gray, byte>(screenshootPath);
+            //Image<Gray, float> srcSobel = srcGray.Sobel(0, 1, 3).Add(srcGray.Sobel(1, 0, 3)).AbsDiff(new Gray(0.0));
+
+            //Image<Gray, byte> desGray = game.GameMat.ToImage<Gray, byte>();
+            //Image<Gray, float> desSobel = desGray.Sobel(0, 1, 3).Add(desGray.Sobel(1, 0, 3)).AbsDiff(new Gray(0.0));
+
+
+            CvInvoke.MatchTemplate(source, destination.GameMat, resultMat, TemplateMatchingType.CcoeffNormed);
 
             // get the best match position from the match result
             double minVal = 0.0;
@@ -167,11 +180,11 @@ namespace CvTemplateMatching.Infrastructure.Helpers
             //Console.WriteLine($"Best match top left position {maxLoc}");
             //Console.WriteLine($"Best match confidence {maxVal}");
 
-            double threshold = 0.3; // take threshold from 0.3 -> 0.2 (maybe get negative but a little)
+            double threshold = 0.7; // take threshold from 0.3 -> 0.2 (maybe get negative but a little)
 
             //minVal = (1 - minVal) * 100;
 
-            if (minVal < threshold)
+            if (maxVal > threshold)
             {
                 //Console.WriteLine("Found needle");
 
@@ -181,7 +194,7 @@ namespace CvTemplateMatching.Infrastructure.Helpers
                 ////Point top_left = maxLoc;
                 ////Point bottom_right = new Point(top_left.X + destinationWidth, top_left.Y + destinationHeight);
 
-                System.Drawing.Rectangle r = new System.Drawing.Rectangle(minLoc, destination.GameMat.Size);
+                System.Drawing.Rectangle r = new System.Drawing.Rectangle(maxLoc, destination.GameMat.Size);
 
                 CvInvoke.Rectangle(source, r, new MCvScalar(255, 0, 0), 3);
 
@@ -192,8 +205,8 @@ namespace CvTemplateMatching.Infrastructure.Helpers
                 {
                     IsDetected = true,
                     GameName = game.GameName,
-                    X = minLoc.X,
-                    Y = minLoc.Y,
+                    X = maxLoc.X + widthRemain,
+                    Y = maxLoc.Y + heightRemain,
                 };
             }
 

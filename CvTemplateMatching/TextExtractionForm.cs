@@ -148,13 +148,16 @@ namespace CvTemplateMatching
                 // A 41% improvement on speed by specifiying a pixel region
                 //var contentArea = new CropRectangle(x: 1671, y: 73, width: 751, height: 104);
                 var contentArea = new System.Drawing.Rectangle(73, 1671, 104, 751);
-                var img = System.Drawing.Image.FromFile(currentScreenshootPath);
+                var img = new Bitmap(System.Drawing.Image.FromFile(currentScreenshootPath))
+                    .ToImage<Gray, byte>();
+                    //System.Drawing.Image.FromFile(currentScreenshootPath);
                 //var size = img.Size;
                 //Bitmap tempBitmap = new Bitmap(img);
                 //var tempImg = tempBitmap.Clone(contentArea, tempBitmap.PixelFormat);
 
                 //this.pcbImage.Image = tempImg;
-                ocrInput.AddImage(currentScreenshootPath);
+                //ocrInput.AddImage(currentScreenshootPath,new CropRectangle(87, 2039, 881, 103));
+                ocrInput.AddImage(currentScreenshootPath,new CropRectangle(87, img.Height - 156, 667, 90));
 
 
                 var ocrResult = ocr.Read(ocrInput);
@@ -162,7 +165,7 @@ namespace CvTemplateMatching
                 stopwatch.Stop();
                 //Console.WriteLine(ocrResult.Text);
                 this.tbResult.Text = ocrResult.Text;
-
+                
                 this.lblTimeOccupy.Text = stopwatch.Elapsed.ToString();
                 stopwatch.Restart();
             }
